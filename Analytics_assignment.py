@@ -5,6 +5,20 @@ Created on Tue Oct 06 16:13:48 2015
 @author: INSPIRON
 """
 
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 09 15:46:38 2015
+
+@author: INSPIRON
+"""
+
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Oct 06 16:13:48 2015
+
+@author: INSPIRON
+"""
+
 import math
 import sqlite3
 
@@ -26,8 +40,6 @@ for row in c:
     Longitude_Port.append(row[0])
     Latitude_Port.append(row[1])
 Production_Total=sum(Production)
-
-print Longitude,Latitude,Production,Longitude_Port,Latitude_Port
 
 def distance_sph(lat1, long1, lat2, long2):
     #Converting Latitude and longitude to radians
@@ -57,11 +69,50 @@ def distance_sph(lat1, long1, lat2, long2):
 
     distance=arc*6371000 
     return distance
+    
 
-print distance_sph(Latitude[0],Longitude[0],Latitude[1],Longitude[1])    
-print distance_sph(Latitude[1],Longitude[1],Latitude[1],Longitude[1])    
-print distance_sph(Latitude[1],Longitude[1],Latitude[2],Longitude[2])
-print distance_sph(Latitude[0],Longitude[0],Latitude_Port[1],Longitude_Port[1])    
+def cost_transport_each_Location(Latitude,Longitude):
+    cost_transport_location=[]
+    for i in range(0,len(Longitude)):
+          cost=0
 
+          for j in range(0,len(Longitude)):
+                d=distance_sph(Latitude[i],Longitude[i],Latitude[j],Longitude[j])
+#                print d
+                cost=cost+0.00125*d*Production[j]
+#                print cost
+          cost_transport_location.append(cost)
+    return cost_transport_location  
+
+    
+def cost_transport_Port(Latitude,Longitude,Latitude_Port,Longitude_Port):
+    min_cost_port=[]
+    loc_closest_port=[]
+    for i in range(0,len(Longitude)):
+          cost_trans_port=0
+          distance_port=[]
+          for j in range(0,len(Longitude_Port)):
+                distance_port.append(distance_sph(Latitude[i],Longitude[i],Latitude_Port[j],Longitude_Port[j]))
+          cost_trans_port=cost_trans_port+0.00125*min(distance_port)*Production_Total
+          loc_closest_port.append(distance_port.index(min(distance_port)))
+#          print cost_p
+          min_cost_port.append(cost_trans_port)
+    return min_cost_port,loc_closest_port 
+
+
+
+def minimum_Cost():
+    cost_transport_location= cost_transport_each_Location(Latitude,Longitude)
+    cost_transport_port,loc_closest_port= cost_transport_Port(Latitude,Longitude,Latitude_Port,Longitude_Port)
+
+    final_cost = [sum(i) for i in zip(cost_transport_location,cost_transport_port)]
+    print final_cost;
+   
+
+    index_min_cost=final_cost.index(min(final_cost))
+   
+    print "The location is ",index_min_cost,"And the port is",loc_closest_port[index_min_cost]
+
+print minimum_Cost()
 
 conn.close() 
