@@ -9,7 +9,7 @@ The distance calculation was done in a function called Distance_sph() , based up
  4: Found the cost of transporting material from every other location to the specified location, and hence calculated the total money spent in transporting materials to that location. 
 For this step a function called cost_transport_each_Location () was created. This function has a nested for loop within an outer for loop. For each iteration of the outer loop , it calculates the distance of the ith location from all the locations  by calling the distance function .That distance is used to calculate the total  cost of transferring from all  j-th locations to the given i-th location . The Cost has been assumed to be 8.25 Euros per km for the Truck per trip. The truck can carry 40 tonnes in a trip. Hence the number of trips required = Production/40 . This total cost is stored in the list cost_transport_location
 
- 5: Found the cost to transport to the nearest port for each location. 
+ 5:Found the cost to transport to the nearest port for each location. 
 For this a function called cost_transport_Cost () was created. 
  Given that the total Production had been transferred to a particular location after 4, the production at each location had no effect on the cost now. So only distance was the factor influencing the cost of transport. Based on that the distance of the nearest port from each location was found (min(distance_port ) ,  and using that the cost to transfer to the port was found . The cost estimates remained same as before and Total_Production was used as the value for the production. The index of the closest port for each location was also stored in location_closest_port
 
